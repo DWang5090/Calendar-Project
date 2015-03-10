@@ -1,0 +1,15 @@
+import java.util.Scanner;
+
+
+public class CalendarMain {
+
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		System.out.println("How would you like to set this event as?");
+		String response = input.nextLine();
+		System.out.println("VERSION: 2.0");
+		System.out.println("CLASS: " + response.toUpperCase());
+		
+	}
+
+}
