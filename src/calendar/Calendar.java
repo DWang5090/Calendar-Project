@@ -143,6 +143,7 @@ public class Calendar {
 				
 			writer.println("BEGIN:VCALENDAR");
 			writer.println("VERSION:" + version);
+			writer.println("BEGIN:VEVENT");
 			writer.println("CLASS:" + classification);
 			
 			if ( !location.equals("") )
@@ -152,7 +153,8 @@ public class Calendar {
 			writer.println("SUMMARY:" + summary);
 			writer.println("DTSTART:" + DTSTART);
 			writer.println("DTEND:" + DTEND);
-			writer.println("TZID:" + timeZone);			
+			writer.println("TZID:" + timeZone);
+			writer.println("END:VEVENT");
 			writer.println("END:VCALENDAR");
 			writer.close();
 		}
