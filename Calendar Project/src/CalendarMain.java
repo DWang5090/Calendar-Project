@@ -7,22 +7,23 @@ public class CalendarMain {
 
 	public static void main(String[] args) throws IOException {
 		Scanner input = new Scanner(System.in);
-		String response = "";
-		boolean correctResponse = true;
-		//System.out.println("VERSION: 2.0");
-		//System.out.println("CLASS: " + response.toUpperCase());
+		Calendar newCalendar = new Calendar();
+	    
+		boolean correctClass = false;
 		
-		while(correctResponse){
-			if(response.toUpperCase().equals("PUBLIC") || response.toUpperCase().equals("PRIVATE") || response.toUpperCase().equals("CONFIDENTIAL")){
-				correctResponse  = false;
-			}else{
-				System.out.println("How would you like to set this event as?");
-				response = input.nextLine();
-			}
+		while(!correctClass){
+			System.out.println("How would you like to set this event as? (Public, Private or Confidential)");	
+			newCalendar.setClassification(input.nextLine());
+			//correctClass = newCalendar.checkClassification(newCalendar.getClassification());
+			System.out.println("Set the destination for the event.");
+			newCalendar.setLocation(input.nextLine());
 		}
 		
+		String output = "VERSION: 2.0" + "\n" + 
+						"CLASS: " + newCalendar.getClassification() + "\n" +
+						"LOCATION: " + newCalendar.getLocation();
 		FileWriter file = new FileWriter("event.ics");
-		file.write("VERSION: 2.0" + "\n" + "CLASS: " + response.toUpperCase());
+		file.write(output);
 		
 		file.close();
 	}

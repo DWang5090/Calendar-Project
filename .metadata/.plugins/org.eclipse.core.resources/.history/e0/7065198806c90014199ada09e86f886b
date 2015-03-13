@@ -1,0 +1,30 @@
+
+public class Calendar {
+	
+	private String classification;
+	private String location;
+	
+	public Calendar(){
+		
+	}
+	
+	public boolean checkClassification(String classification){
+	    if(classification.toUpperCase().equals("PUBLIC") || classification.toUpperCase().equals("PRIVATE") || classification.toUpperCase().equals("CONFIDENTIAL")){
+	    	return true;
+	    }
+	    return false;
+	}
+	
+	public void setClassification(String classification){
+		this.classification = classification;
+	}
+	
+	public String getClassification(){
+		return classification.toUpperCase();
+	}
+	
+	public void setLocation(String location){
+		
+	}
+	}
+}
