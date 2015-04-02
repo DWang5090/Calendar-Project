@@ -137,7 +137,7 @@ public class Calendar {
     }
 
     catch (ParseException e) {
-      throw new IllegalArgumentException("Invalid date tiem format.");
+      throw new IllegalArgumentException("Invalid date time format.");
     }
 
     DTSTART = dtSTART;

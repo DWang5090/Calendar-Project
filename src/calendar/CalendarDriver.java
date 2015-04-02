@@ -50,7 +50,6 @@ public class CalendarDriver {
     do {
       System.out.println("What would you like to name the calendar file?");
       fileName = keybd.nextLine().trim();
-
       if (fileName.lastIndexOf(".") == -1)
         fileName = fileName + ".ics";
 
@@ -62,7 +61,6 @@ public class CalendarDriver {
       }
 
       file = new File(fileName);
-
       if (file.exists() && !file.isDirectory()) {
 
         System.out.println("The file already exists.  Would you like to overwrite it? (yes/no)  ");
