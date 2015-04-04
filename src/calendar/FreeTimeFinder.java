@@ -11,13 +11,13 @@ import java.util.Scanner;
  */
 public class FreeTimeFinder {
 
-  private String[] fileNames;                //array of file names to sort through
-  private ArrayList<TimeNode> busy;          //array of busy times, sort by start time
-  private ArrayList<Calendar> freeTimes;     //array of free time events
-  private int size;                          //size of array of free time
-  private String date;                       //the date of free times
-  private String tzid;                       //the time zone id of free times
-  
+  private String[] fileNames; // array of file names to sort through
+  private ArrayList<TimeNode> busy; // array of busy times, sort by start time
+  private ArrayList<Calendar> freeTimes; // array of free time events
+  private int size; // size of array of free time
+  private String date; // the date of free times
+  private String tzid; // the time zone id of free times
+
 
   /**
    * Constructor for free time finder.
@@ -28,21 +28,23 @@ public class FreeTimeFinder {
 
     this.fileNames = fNames;
     this.busy = new ArrayList<TimeNode>();
-    this.freeTimes = null;
+    this.freeTimes = new ArrayList<Calendar>();
     this.size = 0;
     this.date = null;
     this.tzid = null;
   }
-  
+
+
   /**
    * @return size of list
    */
   public int getSize() {
     return this.size;
   }
-  
+
+
   /**
-   * Returns the free time event of a 
+   * Returns the free time event of a
    * 
    * @param i - index of free time event
    * @return free time event
@@ -101,18 +103,18 @@ public class FreeTimeFinder {
       temp = this.busy.get(0);
       startDate = temp.startDate;
       endDate = temp.endDate;
-      
-      //also update class variables for date and time zone
+
+      // also update class variables for date and time zone
       this.date = startDate;
       this.tzid = temp.tzid;
 
       for (int i = 1; i < busy.size(); i++) {
 
         temp = this.busy.get(i);
-        
-        if ( !startDate.equals(endDate) )
+
+        if (!startDate.equals(endDate))
           throw new IOException("The start date and end date must be the same.");
-        
+
         if (!temp.startDate.equals(startDate) || !temp.endDate.equals(endDate) || !temp.tzid.equals(this.tzid))
           throw new IOException("The start dates, end dates, or time zones did not match.");
       }
@@ -125,69 +127,75 @@ public class FreeTimeFinder {
       throw new IOException("Could not open file: " + ioe.getMessage());
     }
   }
-  
-  
+
+
   /**
    * Finds the free time between events and stores that info in an array.
    */
   public void calculateFreeTimes() {
-    
-    int start, end, i = 0;
+
+    int i = 0;
     TimeNode temp, current;
-    
+
     current = this.busy.get(i);
-    
-    //compare first event to the start of the day
-    if ( current.startTime > 0 ) {
-      createEvent(0, current.startTime);
-      i++;
+
+    // compare first event to the start of the day
+    if (Integer.parseInt(current.startTime) > 0) {
+      createEvent("000000", current.startTime);
     }
-    
-    while ( i < this.busy.size() ) {
-      
-      temp = this.busy.get(i+1);
-      
-      //disregard an event if it ended before the "current" event ended
-      if (temp.endTime < current.endTime ) {
+
+    while (i < this.busy.size() - 1) {
+
+      temp = this.busy.get(i + 1);
+
+      // disregard an event if the current event ends after it does
+      if (Integer.parseInt(current.endTime) > Integer.parseInt(temp.endTime)) {
+        System.out.println(1);
         i++;
         continue;
       }
-      
-      
 
-      
-      
+      // create free time event if there is free time between
+      // the two events being compared, then update the current event
+      else if (Integer.parseInt(current.endTime) < Integer.parseInt(temp.startTime)) {
+        System.out.println(2);
+        createEvent(current.endTime, temp.startTime);
+        current = temp;
+      }
+
+      // update the current event if it ends before the next event ends
+      else if (Integer.parseInt(current.endTime) < Integer.parseInt(temp.endTime))
+        current = temp;
+
       i++;
     }
-    
-    //compare last event to the end of the day
-    if ( current.endTime < 2359 ) {
-      createEvent(current.endTime, 2359);
+
+    // compare last event to the end of the day
+    if (Integer.parseInt(current.endTime) < 235900) {
+      createEvent(current.endTime, "235900");
     }
-    
-    //update size of free time array
+
+    // update size of free time array
     this.size = this.freeTimes.size();
   }
-  
-  
+
+
   /**
-   * Adds a free time event to the list of free times. 
+   * Adds a free time event to the list of free times.
    */
-  public void createEvent(int startTime, int endTime) {
-    
+  public void createEvent(String startTime, String endTime) {
+
     Calendar event = new Calendar();
-    
+
     event.setClassification("PUBLIC");
     event.setPriority(1);
     event.setSummary("FREE TIME");
     event.setTimeZone(this.tzid);
     event.setDTSTART(this.date + "T" + startTime);
     event.setDTEND(this.date + "T" + endTime);
-    
-    freeTimes.add(event);
+
+    this.freeTimes.add(event);
   }
-  
-  
 
   /**
    * Node class which saves the start and end date times of an event.
@@ -196,8 +204,8 @@ public class FreeTimeFinder {
 
     private String startDate; // start date
     private String endDate; // end date
-    private int startTime; // start time
-    private int endTime; // end time
+    private String startTime; // start time
+    private String endTime; // end time
     private String tzid; // time zone id
 
 
@@ -207,8 +215,8 @@ public class FreeTimeFinder {
     private TimeNode() {
       this.startDate = null;
       this.endDate = null;
-      this.startTime = -1;
-      this.endTime = -1;
+      this.startTime = null;
+      this.endTime = null;
       this.tzid = null;
     }
 
@@ -220,7 +228,7 @@ public class FreeTimeFinder {
      */
     private void setStart(String dtstart) {
       this.startDate = dtstart.substring(0, 8);
-      this.startTime = Integer.parseInt(dtstart.substring(9, dtstart.length()));
+      this.startTime = dtstart.substring(9, 15);
     }
 
 
@@ -231,7 +239,7 @@ public class FreeTimeFinder {
      */
     private void setEnd(String dtend) {
       this.endDate = dtend.substring(0, 8);
-      this.endTime = Integer.parseInt(dtend.substring(9, dtend.length()));
+      this.endTime = dtend.substring(9, 15);
     }
 
 
@@ -247,7 +255,7 @@ public class FreeTimeFinder {
 
     @Override
     public int compareTo(TimeNode node) {
-      return this.startTime - node.startTime;
+      return Integer.parseInt(this.startTime) - Integer.parseInt(node.startTime);
     }
   }
 

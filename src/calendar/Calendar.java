@@ -137,7 +137,7 @@ public class Calendar {
     }
 
     catch (ParseException e) {
-      throw new IllegalArgumentException("Invalid date tiem format.");
+      throw new IllegalArgumentException("Invalid date time format.");
     }
 
     DTSTART = dtSTART;
@@ -238,7 +238,7 @@ public class Calendar {
       writer.println("BEGIN:VEVENT");
       writer.println("CLASS:" + classification);
 
-      if (!location.equals(""))
+      if (location != null && !location.equals(""))
         writer.println("LOCATION:" + location);
 
       writer.println("PRIORITY:" + priority);
