@@ -4,8 +4,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
+/**
+ * Takes as input a list of calendar files on a given day,
+ * then creates files which contain free times on that day.
+ */
 public class FreeTimeDriver {
 
+  /**
+   * Main driver.
+   */
   public static void main(String[] args) {
 
     FreeTimeFinder freeTime;

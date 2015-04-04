@@ -109,8 +109,11 @@ public class FreeTimeFinder {
       for (int i = 1; i < busy.size(); i++) {
 
         temp = this.busy.get(i);
-
-        if (!temp.startDate.equals(startDate) || !temp.endDate.equals(endDate) || !temp.tzid.equals(this.date))
+        
+        if ( !startDate.equals(endDate) )
+          throw new IOException("The start date and end date must be the same.");
+        
+        if (!temp.startDate.equals(startDate) || !temp.endDate.equals(endDate) || !temp.tzid.equals(this.tzid))
           throw new IOException("The start dates, end dates, or time zones did not match.");
       }
 
@@ -130,12 +133,37 @@ public class FreeTimeFinder {
   public void calculateFreeTimes() {
     
     int start, end, i = 0;
+    TimeNode temp, current;
     
-    if ( this.busy.get(i).startTime > 0 ) {
-      createEvent(0, this.busy.get(i).startTime);
+    current = this.busy.get(i);
+    
+    //compare first event to the start of the day
+    if ( current.startTime > 0 ) {
+      createEvent(0, current.startTime);
+      i++;
     }
     
+    while ( i < this.busy.size() ) {
+      
+      temp = this.busy.get(i+1);
+      
+      //disregard an event if it ended before the "current" event ended
+      if (temp.endTime < current.endTime ) {
+        i++;
+        continue;
+      }
+      
+      
+
+      
+      
+      i++;
+    }
     
+    //compare last event to the end of the day
+    if ( current.endTime < 2359 ) {
+      createEvent(current.endTime, 2359);
+    }
     
     //update size of free time array
     this.size = this.freeTimes.size();
@@ -147,6 +175,16 @@ public class FreeTimeFinder {
    */
   public void createEvent(int startTime, int endTime) {
     
+    Calendar event = new Calendar();
+    
+    event.setClassification("PUBLIC");
+    event.setPriority(1);
+    event.setSummary("FREE TIME");
+    event.setTimeZone(this.tzid);
+    event.setDTSTART(this.date + "T" + startTime);
+    event.setDTEND(this.date + "T" + endTime);
+    
+    freeTimes.add(event);
   }
   
   
