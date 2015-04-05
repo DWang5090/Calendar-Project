@@ -144,13 +144,13 @@ public class FreeTimeFinder {
       createEvent("000000", current.startTime);
     }
 
+    // cycle through the list of events and compare two at a time
     while (i < this.busy.size() - 1) {
 
       temp = this.busy.get(i + 1);
 
       // disregard an event if the current event ends after it does
       if (Integer.parseInt(current.endTime) > Integer.parseInt(temp.endTime)) {
-        System.out.println(1);
         i++;
         continue;
       }
@@ -158,7 +158,6 @@ public class FreeTimeFinder {
       // create free time event if there is free time between
       // the two events being compared, then update the current event
       else if (Integer.parseInt(current.endTime) < Integer.parseInt(temp.startTime)) {
-        System.out.println(2);
         createEvent(current.endTime, temp.startTime);
         current = temp;
       }
@@ -204,8 +203,8 @@ public class FreeTimeFinder {
 
     private String startDate; // start date
     private String endDate; // end date
-    private String startTime; // start time
-    private String endTime; // end time
+    private String startTime; // start time, saved as a String to preserve leading zeroes
+    private String endTime; // end time, saved as a String to preserve leading zeroes
     private String tzid; // time zone id
 
 

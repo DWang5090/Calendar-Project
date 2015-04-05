@@ -32,7 +32,7 @@ public class FreeTimeDriver {
       }
 
       catch (IOException ioe) {
-        System.out.println(ioe);
+        System.out.println(ioe.getMessage());
       }
       
       System.out.println("Calendar files noting the free time between events have been created.");
