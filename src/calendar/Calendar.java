@@ -179,6 +179,7 @@ public class Calendar {
     int h2 = Integer.parseInt(dtEND.substring(9, 11));
     int m2 = Integer.parseInt(dtEND.substring(11, 13));
 
+    //verify that the end date time comes after the start date time
     if (y1 > y2 || (y1 == y2 && M1 > M2) || (y1 == y2 && M1 == M2 && d1 > d2))
       throw new IllegalArgumentException("End date cannot come before start date.");
 
@@ -198,7 +199,7 @@ public class Calendar {
   }
 
 
-  /**
+  /** 
    * @param tzid - the time zone ID to use
    * @throws IllegalArgumentException - if the given time zone ID is invalid
    */

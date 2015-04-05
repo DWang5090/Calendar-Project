@@ -339,6 +339,7 @@ public class CalendarDriver {
     int M2 = Integer.parseInt(end.substring(0, 2));
     int d2 = Integer.parseInt(end.substring(3, 5));
 
+    //verify that the end date is after or on the start date
     if (y1 > y2 || (y1 == y2 && M1 > M2) || (y1 == y2 && M1 == M2 && d1 > d2))
       flag = false;
 
@@ -368,6 +369,7 @@ public class CalendarDriver {
     int h2 = Integer.parseInt(endTime.substring(0, 2));
     int m2 = Integer.parseInt(endTime.substring(3, 5));
 
+    //if the end date is the same as the start date, verify that the end time comes after the start time
     if (y1 == y2 && M1 == M2 && d1 == d2)
       if (h1 > h2 || (h1 == h2 && m1 >= m2))
         flag = false;
@@ -399,19 +401,19 @@ public class CalendarDriver {
       System.out.format("%-16s %-16s%n", s1, s2);
     }
 
-    s1 = "GMT+" + 13 + " ";
-    s2 = "GMT+" + 14 + " ";
+    s1 = "GMT-" + 13 + " ";
+    s2 = "GMT-" + 14 + " ";
 
-    System.out.format("%-16s%n", s1);
-    System.out.format("%-16s%n", s2);
+    System.out.format("%-16s %-16s%n", " ", s1);
+    System.out.format("%-16s %-16s%n", " ", s2);
 
     do {
       while ((input = keybd.nextLine().trim()).equals("")) {
       }
-      valid = (input.matches(regex) || input.equals("0") || input.equals("+13") || input.equals("+14"));
+      valid = (input.matches(regex) || input.equals("0") || input.equals("-13") || input.equals("-14"));
 
       if (!valid)
-        System.out.println("Invalid input.  Please enter a signed integer between -12 and +14.");
+        System.out.println("Invalid input.  Please enter a signed integer between -14 and +12.");
     }
     while (!valid);
 
