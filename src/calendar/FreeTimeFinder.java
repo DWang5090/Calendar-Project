@@ -188,7 +188,7 @@ public class FreeTimeFinder {
 
     event.setClassification("PUBLIC");
     event.setPriority(1);
-    event.setSummary("FREE TIME");
+    event.setSummary("POSSIBLE MEETING TIME");
     event.setTimeZone(this.tzid);
     event.setDTSTART(this.date + "T" + startTime);
     event.setDTEND(this.date + "T" + endTime);
@@ -199,7 +199,7 @@ public class FreeTimeFinder {
   /**
    * Node class which saves the start and end date times of an event.
    */
-  private class TimeNode implements Comparable<TimeNode> {
+  public class TimeNode implements Comparable<TimeNode> {
 
     private String startDate; // start date
     private String endDate; // end date
@@ -211,7 +211,7 @@ public class FreeTimeFinder {
     /**
      * Default constructor of the TimeNode class.
      */
-    private TimeNode() {
+    TimeNode() {
       this.startDate = null;
       this.endDate = null;
       this.startTime = null;

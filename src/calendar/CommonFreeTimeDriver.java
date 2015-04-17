@@ -16,39 +16,11 @@ public class CommonFreeTimeDriver {
    */
   public static void main(String[] args) {
 
-    FreeTimeFinder freeTime;
-    String[] fileNames, fileNames1, fileNames2;
+    FreeTimeFinder freeTime = null;
+    String[] fileNames = null, fileNames1 = null, fileNames2= null;
     Scanner keybd = new Scanner(System.in);
-
-    //collect file names for both people
-    if ( (fileNames1=getFiles(keybd, "first")) != null && (fileNames2=getFiles(keybd, "second")) != null ) {
-      
-      //put both file lists into a single array
-      fileNames = Arrays.copyOf(fileNames1, fileNames1.length + fileNames2.length);
-      System.arraycopy(fileNames2, 0, fileNames, fileNames1.length, fileNames2.length);      
-      freeTime = new FreeTimeFinder(fileNames);
-
-      try {
-        //parse the files to find busy times, then calculate shared free times
-        freeTime.calculateBusyTimes();
-        freeTime.calculateFreeTimes();
-        
-        //make calendar files for the shared free times
-        for (int i = 0; i < freeTime.getSize(); i++) {
-          freeTime.getFreeEvent(i).makeICS("FreeTime" + i + ".ics");
-        }
-      }
-
-      catch (IOException ioe) {
-        System.out.println(ioe.getMessage());
-      }
-      
-      System.out.println("Calendar files noting the free time between events have been created.");
-    }
-
-    else
-      System.out.println("Error!  Invalid file names!");
-
+    
+    initiateProgram(freeTime, fileNames, fileNames1, fileNames2, keybd);
     keybd.close();    
   }
 
@@ -60,7 +32,7 @@ public class CommonFreeTimeDriver {
    */
   public static String[] getFiles(Scanner keybd, String person) {
 
-    String input, extension;
+    String input, extension = "";
     String[] fileNames;
     File file;
 
@@ -70,20 +42,63 @@ public class CommonFreeTimeDriver {
 
     for (int i = 0; i < fileNames.length; i++) {
 
-      file = new File(fileNames[i]);
-
-      // ensure that the file exists and has a .ics extension
-      if (file.exists() && !file.isDirectory()) {
-        extension = fileNames[i].substring(fileNames[i].lastIndexOf(".") + 1, fileNames[i].length());
-
-        if (!extension.equalsIgnoreCase("ics"))
-          return null;
-      }
-
-      else
-        return null;
+	      file = new File(fileNames[i]);
+	      if(!fileExists(file, extension, fileNames, i)){
+	    	  return null;
+	      };
     }
-
     return fileNames;
+  }
+  
+  public static boolean fileExists(File file, String extension, String [] fileNames, int index){
+	  if (file.exists() && !file.isDirectory()) {
+          extension = fileNames[index].substring(fileNames[index].lastIndexOf(".") + 1, fileNames[index].length());
+          if(!hasExtension(extension)){
+        	  return false;
+          };
+          return true;
+      }
+      else
+        return false;
+  }
+  
+  public static boolean hasExtension(String extension){
+	  if (!extension.equalsIgnoreCase("ics")){
+          return false;
+	  }else{
+		  return true;
+	  }
+  }
+  
+  public static boolean initiateProgram(FreeTimeFinder freeTime,  String[] fileNames, String[] fileNames1, String[] fileNames2, Scanner keybd){
+	  //collect file names for both people
+	    if ( (fileNames1=getFiles(keybd, "first")) != null && (fileNames2=getFiles(keybd, "second")) != null ) {
+	      
+	      //put both file lists into a single array
+	      fileNames = Arrays.copyOf(fileNames1, fileNames1.length + fileNames2.length);
+	      System.arraycopy(fileNames2, 0, fileNames, fileNames1.length, fileNames2.length);      
+	      freeTime = new FreeTimeFinder(fileNames);
+
+	      try {
+	        //parse the files to find busy times, then calculate shared free times
+	        freeTime.calculateBusyTimes();
+	        freeTime.calculateFreeTimes();
+	        
+	        //make calendar files for the shared free times
+	        for (int i = 0; i < freeTime.getSize(); i++) {
+	          freeTime.getFreeEvent(i).makeICS("FreeTime" + i + ".ics");
+	        }
+	      }
+	      
+	      catch (IOException ioe) {
+	        System.out.println(ioe.getMessage());
+	      }
+	      
+	      System.out.println("Calendar files noting the free time between events have been created.");
+	      return true;
+	    }else{
+	      System.out.println("Error!  Invalid file names!");
+	      return false;
+	    }
   }
 }

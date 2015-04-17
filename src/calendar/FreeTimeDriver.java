@@ -61,7 +61,7 @@ public class FreeTimeDriver {
 
     System.out.println("Please enter a list of .ics files to read from, including the extension.");
     input = keybd.nextLine();
-    keybd.close();
+    //keybd.close();
 
     fileNames = input.split("\\s+");
 
